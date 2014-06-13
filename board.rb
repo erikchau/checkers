@@ -1,5 +1,3 @@
-require 'colorize'
-require "./piece.rb"
 class Board
 
   def initialize
@@ -23,8 +21,9 @@ class Board
           end
         end
       end
-      print "\n"
+      puts "\n"
     end
+    puts
   end
 
   def [](row, col)
@@ -50,17 +49,31 @@ class Board
   end
   
   def capturable?(pos, cap_pos)
-    self[pos[0], pos[1]].color != self[cap_pos[0], cap_pos[1]].color
+    self[pos[0], pos[1]].color != self[cap_pos[0], cap_pos[1]].color 
+  end
+  
+  def dup
+    dup_board = Board.new
+    @board.each_with_index do |row, row_ind|
+      row.each_with_index do |piece, col_ind|
+        next if piece.nil?
+        dup_board[row_ind, col_ind] = 
+             Piece.new(piece.color, [row_ind, col_ind], dup_board)
+      end
+    end
+    dup_board
   end
     
 end
-  
+
+
 a = Board.new
 a.setup(0,2,:b)
 a.setup(5,7,:w)
 a.render
-a[2,2].perform_slide([3,0])
-puts 
-puts
-puts
+a[5,5].perform_moves([[4,4]])
+a[4,4].perform_moves([[3,3]])
+a[6,6].perform_moves([[5,5]])
+a.render
+a[2,2].perform_moves([[4,4],[6,6]])
 a.render
