@@ -52,7 +52,7 @@ class Board
     self[pos[0], pos[1]].color != self[cap_pos[0], cap_pos[1]].color 
   end
   
-  def dup
+  def deep_dup
     dup_board = Board.new
     @board.each_with_index do |row, row_ind|
       row.each_with_index do |piece, col_ind|
@@ -63,17 +63,19 @@ class Board
     end
     dup_board
   end
+  
+  def piece_collect(color)
+    @board.flatten.compact.select { |piece| piece.color == color}
+  end
+  
+  def piece_count(color)
+    piece_collect(color).count
+  end
+  
+  def parse(seq)
+  end
+    
     
 end
 
 
-a = Board.new
-a.setup(0,2,:b)
-a.setup(5,7,:w)
-a.render
-a[5,5].perform_moves([[4,4]])
-a[4,4].perform_moves([[3,3]])
-a[6,6].perform_moves([[5,5]])
-a.render
-a[2,2].perform_moves([[4,4],[6,6]])
-a.render
